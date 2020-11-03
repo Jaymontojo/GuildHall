@@ -13,6 +13,10 @@ export default function NewQuest() {
   //send user back to the home screen
   const history = useHistory()
 
+  function handleGoBack() {
+    history.push('/')
+  }
+
   async function handleSubmit(e) {
     e.preventDefault()
     try{
@@ -56,6 +60,7 @@ export default function NewQuest() {
               <Button disabled={loading} className="w-100" type="submit">
                 Submit
               </Button>
+              <Button className="w-100 " onClick={handleGoBack}>Back</Button>
             </Form>
         </Card.Body>
       </Card>

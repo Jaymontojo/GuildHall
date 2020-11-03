@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react"
 import { Form, Button, Card, Alert } from "react-bootstrap"
 import { useAuth } from "../contexts/AuthContext"
 import { Link, useHistory } from "react-router-dom"
+import { db } from "../firebase";
 
 export default function Signup() {
   const displayNameRef = useRef()
@@ -27,6 +28,11 @@ export default function Signup() {
       setError("")
       setLoading(true)
       await signup(emailRef.current.value, passwordRef.current.value)
+      await db.collection("users").doc().set({
+        displayName:displayNameRef.current.value, 
+        emailName:emailRef.current.value,
+        password:passwordRef.current.value
+      })
       history.push("/")
     } catch {
       setError("Failed to create an account")
@@ -43,10 +49,10 @@ export default function Signup() {
           {error && <Alert variant="danger">{error}</Alert>}  
           
           <Form onSubmit={handleSubmit}>
-            {/* grab email into emailRef*/}
+            {/* grab display name into displayNameRef*/}
             <Form.Group id="display-name">
               <Form.Label>Display Name</Form.Label>
-              <Form.Control />
+              <Form.Control ref={displayNameRef} required/>
               <Form.Text className="text-muted">
                 Other Adventurers will see this!
               </Form.Text>

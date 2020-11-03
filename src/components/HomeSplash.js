@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import {  Container, Alert, Spinner, Card } from "react-bootstrap";
+import {  Container, Spinner, Card, Button } from "react-bootstrap";
 import { db } from '../firebase.js';
-import AllQuests from './AllQuests.js';
-import Navbar from './Navbar.js'
-
+import NavigationBar from './NavigationBar.js'
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
 
 export default function HomeSplash() {
-  const [error, setError] = useState("")
+  //const [track, setTrack] = useState("Track")
   const [loading, setLoading] = useState(false)
   const [questCards, setQuestCards] = useState([])
   
   const questRef = db.collection("quests");
   // const snapshot = await questRef.get();
+
+  const responsive = {
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 3,
+      slidesToSlide: 3 // optional, default to 1.
+  }}
 
   function handleGetQuests() {
     setLoading(true)
@@ -34,20 +41,36 @@ export default function HomeSplash() {
   }
   return (
     <>
-      <Card
-      className="d-flex align-items-center justify-content-center"
-      >
+      <Card>
         <Container>
-          <Navbar></Navbar>
-          {questCards.map((quest) => (
-          <Card>
-            <Card.Body>
-              <h3><b>{quest.title}</b></h3>
-              <h4>By: {quest.commisioner}</h4>
-              <p>{quest.body}</p>
-            </Card.Body>
-          </Card>
-        ))}
+          <NavigationBar></NavigationBar>
+          <Carousel   
+            swipeable={true}
+            draggable={true}
+            showDots={true}
+            responsive={responsive}
+            ssr={true} // means to render carousel on server-side.
+            infinite={true}
+            autoPlaySpeed={1000}
+            transitionDuration={500}
+            containerClass="carousel-container"
+            dotListClass="custom-dot-list-style"
+            itemClass="carousel-item-padding-40-px"
+          >
+            {questCards.map((quest) => ( 
+              <Card> 
+                <Card.Header>
+                    <h3><b>{quest.title}</b></h3>
+                  <Card.Body>
+                    <h4>By: {quest.commisioner}</h4>
+                    <p>{quest.body}</p>
+                    <Button>Track</Button>
+                  </Card.Body>
+                </Card.Header>
+              </Card> 
+            ))}
+          </Carousel>
+
         </Container>
       </Card>
     </>
