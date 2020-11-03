@@ -4,6 +4,7 @@ import { useAuth } from "../contexts/AuthContext"
 import { Link, useHistory } from "react-router-dom"
 
 export default function Signup() {
+  const displayNameRef = useRef()
   const emailRef = useRef()
   const passwordRef = useRef()
   const passwordConfirmRef = useRef()
@@ -43,15 +44,28 @@ export default function Signup() {
           
           <Form onSubmit={handleSubmit}>
             {/* grab email into emailRef*/}
+            <Form.Group id="display-name">
+              <Form.Label>Display Name</Form.Label>
+              <Form.Control />
+              <Form.Text className="text-muted">
+                Other Adventurers will see this!
+              </Form.Text>
+            </Form.Group>
+
             <Form.Group id="email">
               <Form.Label>Email</Form.Label>
               <Form.Control type="email" ref={emailRef} required />
+              <Form.Text className="text-muted">
+                We'll never share your email address, trust us!
+              </Form.Text>
             </Form.Group>
             
             {/* grab password into passwordRef**/}
             <Form.Group id="password">
               <Form.Label>Password</Form.Label>
-              <Form.Control type="password" ref={passwordRef} required />
+              <Form.Control type="password" ref={passwordRef} required />              <Form.Text className="text-muted">
+                Uppercase and lowercase (include special characters and numbers!)
+              </Form.Text>
             </Form.Group>
             
             {/* grab password into passwordConfirmRef**/}

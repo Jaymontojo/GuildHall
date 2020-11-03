@@ -1,6 +1,7 @@
 import React from "react"
 import Signup from "./Signup"
 import { Container } from "react-bootstrap"
+import 'bootstrap/dist/css/bootstrap.min.css'
 import { AuthProvider } from "../contexts/AuthContext"
 //switch function
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
@@ -10,6 +11,7 @@ import PrivateRoute from "./PrivateRoute"
 import ForgotPassword from "./ForgotPassword"
 import UpdateProfile from "./UpdateProfile"
 import NewQuest from "./NewQuest"
+
 
 function App() {
   return (
