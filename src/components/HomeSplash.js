@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import {  Container, Spinner, Card, Button } from "react-bootstrap";
+import { useAuth } from "../contexts/AuthContext"
+import {  Container, Spinner, Card, Button, Navbar } from "react-bootstrap";
 import { db } from '../firebase.js';
-import NavigationBar from './NavigationBar.js'
+import AllQuestHeader from './AllQuestHeader.js'
+import UserPanel from './UserPanel.js'
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 
@@ -9,6 +11,8 @@ export default function HomeSplash() {
   //const [track, setTrack] = useState("Track")
   const [loading, setLoading] = useState(false)
   const [questCards, setQuestCards] = useState([])
+  const [trackedQuestCards, setTrackedQuestCards] = useState([])
+  const { currentUser } = useAuth()
   
   const questRef = db.collection("quests");
   // const snapshot = await questRef.get();
@@ -20,7 +24,10 @@ export default function HomeSplash() {
       slidesToSlide: 3 // optional, default to 1.
   }}
 
-  function handleGetQuests() {
+
+
+  //this fetches particularly for user tracked fetch cards.
+  function handleGetTrackedQuests() {
     setLoading(true)
     questRef.onSnapshot((querySnapshot) => {
       const quests = [];
@@ -31,9 +38,23 @@ export default function HomeSplash() {
       setLoading(false);
     });
   }
-  console.log(questCards)
+
+  //this upodates our general pool of task cards in real time
+  function handleGetGenQuests() {
+    setLoading(true)
+    questRef.onSnapshot((querySnapshot) => {
+      const quests = [];
+      querySnapshot.forEach((doc) => {
+        quests.push(doc.data());
+      });
+      setQuestCards(quests);
+      setLoading(false);
+    });
+  }
+ 
   useEffect(() => {
-    handleGetQuests()
+    handleGetGenQuests()
+    console.log(currentUser)
   },[])
 
   if(loading) {
@@ -41,9 +62,18 @@ export default function HomeSplash() {
   }
   return (
     <>
-      <Card>
-        <Container>
-          <NavigationBar></NavigationBar>
+      <Container>
+        <UserPanel/>
+      </Container>
+      <Container>
+        
+        <Navbar expand="lg" variant="dark" bg="dark">
+          <Container>
+            <Navbar.Brand href="/">Home</Navbar.Brand>
+          </Container>
+        </Navbar>
+            <AllQuestHeader/>
+        <Card>
           <Carousel   
             swipeable={true}
             draggable={true}
@@ -70,9 +100,8 @@ export default function HomeSplash() {
               </Card> 
             ))}
           </Carousel>
-
-        </Container>
-      </Card>
+        </Card>         
+      </Container>
     </>
   )
 }

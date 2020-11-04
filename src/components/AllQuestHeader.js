@@ -6,7 +6,7 @@ import { useHistory } from "react-router-dom"
   //helps us prevent the user from spamming the button
   //hook that helps us move to a different page
 
-export default function NavigationBar() {
+export default function AllQuestHeader() {
   
   const history = useHistory()
   
@@ -15,11 +15,8 @@ export default function NavigationBar() {
       history.push("/new-quest")
   }
   return (
-      <div id="navBar" className="navbar">
-        <div className = "avatar">
-          <h1>Player portrait</h1>
-        </div>
-        <h1>Title card</h1>
+      <div  id="navBar" variant="dark" className="navbar bg-dark" >
+        <h1 variant="dark" className="navbar bg-dark">placemarker</h1>
         <Button onClick={handleNewQuest}>
           New Quest
         </Button>

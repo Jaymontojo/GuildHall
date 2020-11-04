@@ -28,7 +28,7 @@ export default function Signup() {
       setError("")
       setLoading(true)
       await signup(emailRef.current.value, passwordRef.current.value)
-      await db.collection("users").doc().set({
+      await db.collection("quests").doc().set({
         displayName:displayNameRef.current.value, 
         emailName:emailRef.current.value,
         password:passwordRef.current.value
