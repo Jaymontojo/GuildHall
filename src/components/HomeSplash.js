@@ -12,9 +12,11 @@ export default function HomeSplash() {
   const [loading, setLoading] = useState(false)
   const [questCards, setQuestCards] = useState([])
   const [trackedQuestCards, setTrackedQuestCards] = useState([])
+  const [currentTrackedCard, setcurrentTrackedCard] = useState()
   const { currentUser } = useAuth()
   
   const questRef = db.collection("quests");
+  const trackedQuestRef = db.collection("users");
   // const snapshot = await questRef.get();
 
   const responsive = {
@@ -24,20 +26,36 @@ export default function HomeSplash() {
       slidesToSlide: 3 // optional, default to 1.
   }}
 
-
-
   //this fetches particularly for user tracked fetch cards.
-  function handleGetTrackedQuests() {
+  // function handleTrackedQuests() {
+  //   db.collection('users').get().then((snapshot) => { 
+  //     snapshot.docs.forEach(doc => {
+  //       setTrackedQuestCards(doc.data().trackedQuests)
+  //     })
+  //   })
+  // }
+  function handleTrackedQuests() {
     setLoading(true)
-    questRef.onSnapshot((querySnapshot) => {
-      const quests = [];
+    trackedQuestRef.onSnapshot((querySnapshot) => {
+      const tracked = [];
       querySnapshot.forEach((doc) => {
-        quests.push(doc.data());
+        console.log(doc.data().trackedQuests)
+        tracked.push(doc.data().trackedQuests)
+        console.log(trackedQuestCards);
       });
-      setQuestCards(quests);
+      setTrackedQuestCards(tracked);
       setLoading(false);
     });
   }
+
+  function pushTrackedQuests() {
+
+  }
+
+  function removeTrackedQuests() {
+    
+  }
+  
 
   //this upodates our general pool of task cards in real time
   function handleGetGenQuests() {
@@ -54,7 +72,9 @@ export default function HomeSplash() {
  
   useEffect(() => {
     handleGetGenQuests()
-    console.log(currentUser)
+    handleTrackedQuests()
+    console.log(questCards)
+    console.log(trackedQuestCards)
   },[])
 
   if(loading) {
@@ -94,12 +114,28 @@ export default function HomeSplash() {
                   <Card.Body>
                     <h4>By: {quest.commisioner}</h4>
                     <p>{quest.body}</p>
-                    <Button>Track</Button>
+                    <Button onClick={handleTrackedQuests}>Track</Button>
                   </Card.Body>
                 </Card.Header>
               </Card> 
             ))}
           </Carousel>
+          <>
+          <h1 variant="dark" className="navbar bg-dark " style={{ color:"white", align:"center" }}>My Quest Log</h1>
+            {trackedQuestCards.map((trackedQuest) => (
+              
+              <Card> 
+                <Card.Header>
+                    <h3><b>{trackedQuest.title}</b></h3>
+                  <Card.Body>
+                    <h4>By: {trackedQuest.commisioner}</h4>
+                    <p>{trackedQuest.body}</p>
+                    <Button>Untrack</Button>
+                  </Card.Body>
+                </Card.Header>
+              </Card> 
+            ))}
+          </>
         </Card>         
       </Container>
     </>

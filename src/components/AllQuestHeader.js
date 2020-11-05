@@ -16,7 +16,7 @@ export default function AllQuestHeader() {
   }
   return (
       <div  id="navBar" variant="dark" className="navbar bg-dark" >
-        <h1 variant="dark" className="navbar bg-dark">placemarker</h1>
+        <h1 variant="dark" className="navbar bg-dark " style={{ color:"white", align:"center" }}>Mode Missile-less</h1>
         <Button onClick={handleNewQuest}>
           New Quest
         </Button>
